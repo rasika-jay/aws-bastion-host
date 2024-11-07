@@ -25,12 +25,12 @@ resource "aws_autoscaling_group" "bastion" {
   min_size                  = var.desired_num_instances
   vpc_zone_identifier       = data.aws_subnets.private.ids
   force_delete              = true
-  wait_for_capacity_timeout = "300s"
-  health_check_grace_period = 600
+  health_check_grace_period = 300
   health_check_type         = "ELB"
   default_instance_warmup   = 60
   target_group_arns         = [aws_lb_target_group.bastion.arn]
   protect_from_scale_in     = true
+  termination_policies      = ["OldestLaunchTemplate", "OldestInstance", "ClosestToNextInstanceHour"]
 
   launch_template {
     id      = aws_launch_template.bastion.id
