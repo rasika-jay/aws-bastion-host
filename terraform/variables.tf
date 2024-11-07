@@ -30,4 +30,11 @@ variable "desired_num_instances" {
 
 variable "ssh_key" {
   description = "Public SSH key - must be provided (i.e. cat ~/.ssh/id_rsa.pub or create new)"
+  type        = string
+}
+
+variable "ssh_port" {
+  description = "TCP port used for SSH"
+  default     = 22
+  type        = number
 }

@@ -13,7 +13,7 @@ resource "aws_lb" "bastion" {
 resource "aws_lb_listener" "ssh" {
   load_balancer_arn = aws_lb.bastion.arn
   protocol          = "TCP"
-  port              = 22
+  port              = var.ssh_port
 
   default_action {
     type             = "forward"
@@ -23,9 +23,19 @@ resource "aws_lb_listener" "ssh" {
 
 resource "aws_lb_target_group" "bastion" {
   name     = "bastion"
-  port     = 22
+  port     = var.ssh_port
   protocol = "TCP"
   vpc_id   = data.aws_vpc.main.id
+
+  health_check {
+    enabled             = true
+    healthy_threshold   = 3
+    interval            = 30
+    port                = var.ssh_port
+    protocol            = "tcp"
+    timeout             = 30
+    unhealthy_threshold = 3
+  }
 
   lifecycle {
     create_before_destroy = true

@@ -10,8 +10,8 @@ resource "aws_security_group" "bastion_lb" {
 resource "aws_vpc_security_group_ingress_rule" "lb" {
   for_each          = toset(var.allowed_cidrs)
   security_group_id = aws_security_group.bastion_lb.id
-  from_port         = 22
-  to_port           = 22
+  from_port         = var.ssh_port
+  to_port           = var.ssh_port
   ip_protocol       = "tcp"
   cidr_ipv4         = each.key
 }
@@ -32,8 +32,8 @@ resource "aws_security_group" "bastion_host" {
 
 resource "aws_vpc_security_group_ingress_rule" "host" {
   security_group_id            = aws_security_group.bastion_host.id
-  from_port                    = 22
-  to_port                      = 22
+  from_port                    = var.ssh_port
+  to_port                      = var.ssh_port
   ip_protocol                  = "tcp"
   referenced_security_group_id = aws_security_group.bastion_lb.id
 }
