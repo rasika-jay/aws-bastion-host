@@ -1,0 +1,16 @@
+- name: Install SSH
+  ansible.builtin.package:
+    name: openssh
+    state: present
+
+- name: Disable SSH Password Authentication
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: ^PasswordAuthentication
+    line: PasswordAuthentication no
+
+- name: Enable SSH on boot
+  ansible.builtin.service:
+    name: sshd
+    enabled: true
+    state: restarted

@@ -1,0 +1,58 @@
+- name: Install iptables
+  ansible.builtin.package:
+    name: iptables
+    state: present
+
+- name: Install iptables-services
+  ansible.builtin.package:
+    name: iptables-services
+    state: present
+
+- name: Allow SSH chain INPUT
+  ansible.builtin.iptables:
+    chain: INPUT
+    protocol: tcp
+    destination_port: 22
+    jump: ACCEPT
+    comment: Accept SSH connections
+
+- name: Allow SSH chain OUTPUT
+  ansible.builtin.iptables:
+    chain: OUTPUT
+    protocol: tcp
+    source_port: 22
+    ctstate: ESTABLISHED
+    jump: ACCEPT
+    comment: Accept SSH connections
+
+- name: Allow local traffic chain INPUT
+  ansible.builtin.iptables:
+    chain: INPUT
+    jump: ACCEPT
+    comment: Accept local traffic
+    in_interface: lo
+
+- name: Allow local traffic chain OUTPUT
+  ansible.builtin.iptables:
+    chain: OUTPUT
+    jump: ACCEPT
+    comment: Accept local traffic
+    out_interface: lo
+
+- name: Block other traffic chain INPUT
+  ansible.builtin.iptables:
+    chain: INPUT
+    policy: DROP
+    comment: Block other traffic
+
+- name: Block other traffic chain OUTPUT
+  ansible.builtin.iptables:
+    chain: OUTPUT
+    policy: DROP
+    comment: Block other traffic
+
+- name: Enable Iptables on boot
+  ansible.builtin.service:
+    name: iptables
+    enabled: true
+    state: restarted

@@ -1,0 +1,5 @@
+- name: Include SSH tasks
+  ansible.builtin.include_tasks: ssh.yml
+
+- name: Include Iptables tasks
+  ansible.builtin.include_tasks: iptables.yml

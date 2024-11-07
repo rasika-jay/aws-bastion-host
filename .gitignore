@@ -1,0 +1,4 @@
+
+packer/.plugins/*
+packer/goss-spec.yaml
+packer/debug-goss-spec.yaml
