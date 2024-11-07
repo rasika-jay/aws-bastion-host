@@ -2,3 +2,6 @@
 packer/.plugins/*
 packer/goss-spec.yaml
 packer/debug-goss-spec.yaml
+terraform/.terraform*
+terraform/terraform.tfstate*
+terraform/*.tfplan
