@@ -46,6 +46,8 @@ SSH username is the default `ec2-user` for amazon-linux.
 4. Consider using something like `checkov` for scanning Terraform code
 5. Rotate SSH keys frequently
 6. Enable MFA for SSH
+7. Use a non-default SSH port
+8. Ensure VPC ACL is locked to required ports and sources
 
 # Bonus questions
 1. CloudWatch Alarm - please see `cloudwatch.tf`
