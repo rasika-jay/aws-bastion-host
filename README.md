@@ -6,7 +6,7 @@
 4. Docker is used for Packer/Terraform instead of native install dependencies - feel free to update the `PACKER_BIN` / `TERRAFORM_BIN` vars in the Makefile to suit your environment or use native commands.
 5. **VPC** is tagged with `Name:main`, Single **private** subnet with `Type:private` and Single **public** subnet with `Type:public`
 
-# Implimentation Decisions
+# Design Choices / Implimentation Decisions
 
 1. I have used Docker (instead of native install) to isolate my build environment and to always be consistent. I also didn't want to install build dependancies locally. I have created a simple `Makefile` to run these Docker commands, but it is not neccasary and native commands will work as normal.
 2. I have used `us-east-1` as the AWS region as my personal AWS account is locked to this region.
