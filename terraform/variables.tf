@@ -29,5 +29,5 @@ variable "desired_num_instances" {
 }
 
 variable "ssh_key" {
-  description = "Public SSH key - must be provided"
+  description = "Public SSH key - must be provided (i.e. cat ~/.ssh/id_rsa.pub or create new)"
 }
