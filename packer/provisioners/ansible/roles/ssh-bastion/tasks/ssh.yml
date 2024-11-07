@@ -9,6 +9,12 @@
     regexp: ^PasswordAuthentication
     line: PasswordAuthentication no
 
+- name: Disable remote root login
+  lineinfile: 
+    dest: /etc/ssh/sshd_config
+    regexp: '^#?PermitRootLogin' 
+    line: 'PermitRootLogin no'
+
 - name: Enable SSH on boot
   ansible.builtin.service:
     name: sshd
