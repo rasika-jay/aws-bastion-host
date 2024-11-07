@@ -1,4 +1,4 @@
-.PHONY: init build deploy terraform%
+.PHONY: terraform% packer% ansible%
 
 ## Base Config
 LOCAL_WORKDIR ?= $(PWD)
