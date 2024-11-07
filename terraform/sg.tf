@@ -7,6 +7,7 @@ resource "aws_security_group" "bastion_lb" {
   vpc_id      = data.aws_vpc.main.id
 }
 
+# Load balancer only accepts traffic on defined SSH port and allowed CIDRs
 resource "aws_vpc_security_group_ingress_rule" "lb" {
   for_each          = toset(var.allowed_cidrs)
   security_group_id = aws_security_group.bastion_lb.id
@@ -30,6 +31,7 @@ resource "aws_security_group" "bastion_host" {
   vpc_id      = data.aws_vpc.main.id
 }
 
+# Bastion Host only accepts traffic from Load Balancer
 resource "aws_vpc_security_group_ingress_rule" "host" {
   security_group_id            = aws_security_group.bastion_host.id
   from_port                    = var.ssh_port
