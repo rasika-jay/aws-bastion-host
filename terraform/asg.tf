@@ -17,6 +17,14 @@ resource "aws_launch_template" "bastion" {
     security_groups             = [aws_security_group.bastion_host.id]
     delete_on_termination       = true
   }
+
+  tag_specifications {
+    resource_type = "instance"
+
+    tags = {
+      Name = "Bastion"
+    }
+  }
 }
 
 resource "aws_autoscaling_group" "bastion" {
