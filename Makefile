@@ -1,3 +1,5 @@
+.PHONY: $(MAKECMDGOALS)
+
 ## Base Config
 LOCAL_WORKDIR ?= $(PWD)
 DOCKER_WORKDIR?= /workspace
@@ -30,27 +32,22 @@ ANSIBLE_BIN ?= docker run --entrypoint /usr/bin/ansible-playbook -it -v $(HOME)/
 #### PACKER ####
 
 # build docker image required for running ansible and packer within docker
-.PHONY: packer-image
 packer-image:
 	docker build --build-arg PACKER_VER --build-arg ANSIBLE_VER -t packer-ansible $(LOCAL_WORKDIR)/docker/packer-ansible
 
 # packer initiation
-.PHONY: packer-init
 packer-init: packer-image
 	$(PACKER_BIN) init $(DOCKER_WORKDIR)
 
 # packer formatting
-.PHONY: packer-fmt
 packer-fmt:
 	$(PACKER_BIN) fmt $(DOCKER_WORKDIR)
 
 # packer validation
-.PHONY: packer-validate
 packer-validate:
 	$(PACKER_BIN) validate $(DOCKER_WORKDIR)
 
 # packer build
-.PHONY: packer-build
 packer-build: packer-init packer-validate ansible-check
 	$(PACKER_BIN) build $(DOCKER_WORKDIR)
 
@@ -58,7 +55,6 @@ packer-build: packer-init packer-validate ansible-check
 #### ANSIBLE ####
 
 # Ansible dry-run
-.PHONY: ansible-check
 ansible-check:
 	$(ANSIBLE_BIN) $(DOCKER_WORKDIR)/playbook.yml --check --syntax-check
 
@@ -66,32 +62,26 @@ ansible-check:
 #### TERRAFORM ####
 
 # terraform initiation
-.PHONY: terraform-init
 terraform-init:
 	$(TERRAFORM_BIN) init
 
 # terraform formatting
-.PHONY: terraform-fmt
 terraform-fmt:
 	$(TERRAFORM_BIN) fmt
 
 # terraform validation and linting
-.PHONY: terraform-lint
 terraform-lint: terraform-init
 	$(TERRAFORM_BIN) validate
 	$(TERRAFORM_BIN) fmt -list=true -check -write=false -diff -recursive
 
 # terraform plan - this will create a terraform plan file
-.PHONY: terraform-plan
 terraform-plan: terraform-lint
 	$(TERRAFORM_BIN) plan -out=$(ENV).tfplan
 
 # terraform apply - this will use a terraform plan created by terraform plan
-.PHONY: terraform-apply
 terraform-apply: terraform-plan
 	$(TERRAFORM_BIN) apply $(ENV).tfplan
 
 # terraform destroy - to destroy all created infrastructure
-.PHONY: terraform-destroy
 terraform-destroy: terraform-init
 	$(TERRAFORM_BIN) destroy
